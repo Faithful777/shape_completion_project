@@ -128,7 +128,7 @@ class ShapeCompletionDataset():
             item['rgbd_intrinsic'] = input_data['intrinsic']
             item['rgbd_frames'] = input_data['frames']
 
-        print(item)
+        print(len(item))
 
         return item
     
