@@ -130,5 +130,5 @@ class ShapeCompletionDataset():
 
         print(item['groundtruth_pcd'])
 
-        return item
+        return item, null
     
