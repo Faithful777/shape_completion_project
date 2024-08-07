@@ -9,6 +9,7 @@ class ShapeCompletionDataset():
 
     def __init__(self,
                  data_source=None,
+                 num_points=3500,
                  split='train',
                  return_pcd=True,
                  return_rgbd=True,
@@ -17,6 +18,7 @@ class ShapeCompletionDataset():
         assert return_pcd or return_rgbd, "return_pcd and return_rgbd are set to False. Set at least one to True"
 
         self.data_source = data_source
+        self.num_points = num_points
         self.split = split
         self.return_pcd = return_pcd
         self.return_rgbd = return_rgbd
@@ -114,7 +116,12 @@ class ShapeCompletionDataset():
         points = np.asarray(pcd.points)
         if len(points) == 0:
             return torch.empty(0, 3)
-        return torch.tensor(points, dtype=torch.float32)
+        # Ensure that num_points does not exceed the total number of points in the point cloud
+        self.num_points = min(self.num_points, points.shape[0])
+        # Randomly sample the desired number of points
+        sampled_indices = np.random.choice(points.shape[0], self.num_points, replace=False)
+        sampled_points = points[sampled_indices]
+        return torch.tensor(sampled_points, dtype=torch.float32)
 
     def __len__(self):
         return len(self.fruit_list)
