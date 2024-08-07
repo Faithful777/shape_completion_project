@@ -112,14 +112,14 @@ class ShapeCompletionDataset():
         return frame_pcd
 
     @staticmethod
-    def pcd_to_tensor(pcd):
+    def pcd_to_tensor(pcd,num_points=self.num_points):
         points = np.asarray(pcd.points)
         if len(points) == 0:
             return torch.empty(0, 3)
         # Ensure that num_points does not exceed the total number of points in the point cloud
-        self.num_points = min(self.num_points, points.shape[0])
+        num_points = min(num_points, points.shape[0])
         # Randomly sample the desired number of points
-        sampled_indices = np.random.choice(points.shape[0], self.num_points, replace=False)
+        sampled_indices = np.random.choice(points.shape[0], num_points, replace=False)
         sampled_points = points[sampled_indices]
         return torch.tensor(sampled_points, dtype=torch.float32)
 
