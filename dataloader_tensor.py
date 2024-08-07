@@ -35,7 +35,7 @@ class ShapeCompletionDataset():
 
     def get_gt(self, fid):
         pcd = o3d.io.read_point_cloud(os.path.join(self.fruit_list[fid]['path'],'gt/pcd/fruit.ply'))
-        return self.pcd_to_tensor(pcd)
+        return self.pcd_to_tensor(pcd, self.num_points)
 
     def get_rgbd(self, fid):
         fid_root = self.fruit_list[fid]['path']
@@ -78,7 +78,7 @@ class ShapeCompletionDataset():
             }
 
         if self.return_pcd:
-            rgbd_data['pcd'] = self.pcd_to_tensor(rgbd_data['pcd'])
+            rgbd_data['pcd'] = self.pcd_to_tensor(rgbd_data['pcd'], self.num_points)
 
         return rgbd_data
 
@@ -112,7 +112,7 @@ class ShapeCompletionDataset():
         return frame_pcd
 
     @staticmethod
-    def pcd_to_tensor(pcd,num_points=self.num_points):
+    def pcd_to_tensor(pcd, num_points):
         points = np.asarray(pcd.points)
         if len(points) == 0:
             return torch.empty(0, 3)
