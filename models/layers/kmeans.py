@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from fast_pytorch_kmeans import KMeans, MultiKMeans
-from torch_scatter import scatter
+import scatter
 from .local_aggregation import CHANNEL_MAP
 
 
