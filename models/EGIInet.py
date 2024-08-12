@@ -22,9 +22,9 @@ class EGIInet(Module):
                                                img_patch_size=img_patch_size,
                                                sample_ratio=pc_sample_rate,
                                                scale=pc_sample_scale,
-                                               block_head=cfg.shared_encoder.block_head,
+                                               block_head=cfg.NETWORK.shared_encoder.block_head,
                                                depth=depth,
-                                               pc_h_hidden_dim=cfg.shared_encoder.pc_h_hidden_dim,
+                                               pc_h_hidden_dim=cfg.NETWORK.shared_encoder.pc_h_hidden_dim,
                                                fuse_layer_num=fuse_layer_num,
                                                )
         self.decoder=Decoder_Network(K1=embed_dim,K2=embed_dim,N=embed_dim)
