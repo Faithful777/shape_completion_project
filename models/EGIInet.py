@@ -10,12 +10,12 @@ from config_vipc import cfg
 
 class EGIInet(Module):
     def __init__(self, 
-                 embed_dim=cfg.EGIInet.embed_dim,
-                 depth=cfg.EGIInet.depth,
-                 img_patch_size=cfg.EGIInet.img_patch_size,
-                 pc_sample_rate=cfg.EGIInet.pc_sample_rate,
-                 pc_sample_scale=cfg.EGIInet.pc_sample_scale,
-                 fuse_layer_num=cfg.EGIInet.fuse_layer_num,
+                 embed_dim=cfg.NETWORK.EGIInet.embed_dim,
+                 depth=cfg.NETWORK.EGIInet.depth,
+                 img_patch_size=cfg.NETWORK.EGIInet.img_patch_size,
+                 pc_sample_rate=cfg.NETWORK.EGIInet.pc_sample_rate,
+                 pc_sample_scale=cfg.NETWORK.EGIInet.pc_sample_scale,
+                 fuse_layer_num=cfg.NETWORK.EGIInet.fuse_layer_num,
                  ):
         super().__init__()
         self.encoder=transfer_loss_shared_encoder(embed_dim=embed_dim,
