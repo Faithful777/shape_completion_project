@@ -111,17 +111,17 @@ class ShapeCompletionDataset():
         frame_pcd = o3d.t.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
         return frame_pcd
 
-    @staticmethod
+    @staticmethod@staticmethod
     def pcd_to_tensor(pcd, num_points):
-        points = np.asarray(pcd.points)
-        if len(points) == 0:
+        points = pcd.point["positions"]  # Access the tensor directly.
+        if points.shape[0] == 0:
             return torch.empty(0, 3)
         # Ensure that num_points does not exceed the total number of points in the point cloud
         num_points = min(num_points, points.shape[0])
         # Randomly sample the desired number of points
-        sampled_indices = np.random.choice(points.shape[0], num_points, replace=False)
+        sampled_indices = torch.randperm(points.shape[0])[:num_points]
         sampled_points = points[sampled_indices]
-        return torch.tensor(sampled_points, dtype=torch.float32)
+        return sampled_points
 
     def __len__(self):
         return len(self.fruit_list)
