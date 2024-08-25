@@ -130,6 +130,7 @@ class ShapeCompletionDataset():
         
         keys = list(self.fruit_list.keys())
         fid = keys[idx]
+        print(fid)
         
         gt_pcd = self.get_gt(fid)
         input_data = self.get_rgbd(fid)
