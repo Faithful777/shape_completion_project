@@ -113,14 +113,14 @@ class ShapeCompletionDataset():
 
     @staticmethod
     def pcd_to_tensor(pcd, num_points):
-        points = pcd.point["positions"]  # Access the tensor directly.
+        points = pcd.point["positions"]  # Access the tensor directly from Open3D.
         if points.shape[0] == 0:
             return torch.empty(0, 3)
         # Ensure that num_points does not exceed the total number of points in the point cloud
         num_points = min(num_points, points.shape[0])
         # Randomly sample the desired number of points
-        sampled_indices = torch.randperm(points.shape[0])[:num_points]
-        sampled_points = points[sampled_indices]
+        sampled_indices = torch.randperm(points.shape[0])[:num_points].to(points.device)  # Ensure tensor is on the same device.
+        sampled_points = points[sampled_indices]  # Index using a tensor.
         return sampled_points
 
     def __len__(self):
