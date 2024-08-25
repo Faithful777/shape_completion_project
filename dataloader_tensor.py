@@ -100,16 +100,16 @@ class ShapeCompletionDataset():
             convert_rgb_to_intensity=False
         )
     
-        # Convert the intrinsic matrix to an Open3D tensor
+        # Convert the intrinsic matrix to a 3x3 Open3D tensor
         intrinsic_tensor = o3d.core.Tensor([[K[0, 0], 0, K[0, 2]],
                                             [0, K[1, 1], K[1, 2]],
                                             [0, 0, 1]], dtype=o3d.core.float64)
     
-        # Set the image dimensions for the intrinsic parameters
-        intrinsic = o3d.core.Tensor([[intrinsic_tensor[0, 0], 0, intrinsic_tensor[0, 2], 0],
-                                     [0, intrinsic_tensor[1, 1], intrinsic_tensor[1, 2], 0],
-                                     [0, 0, 1, 0],
-                                     [0, 0, 0, 1]], dtype=o3d.core.float64)
+        # Convert the intrinsic tensor to the correct 4x4 format expected by the function
+        intrinsic = o3d.core.Tensor(np.array([[K[0, 0], 0, K[0, 2], 0],
+                                              [0, K[1, 1], K[1, 2], 0],
+                                              [0, 0, 1, 0],
+                                              [0, 0, 0, 1]], dtype=np.float64))
     
         # Convert the pose (extrinsic matrix) to an Open3D tensor and invert it
         extrinsic = o3d.core.Tensor(np.linalg.inv(pose), dtype=o3d.core.float64)
