@@ -34,7 +34,7 @@ class ShapeCompletionDataset():
         return fruit_list
 
     def get_gt(self, fid):
-        pcd = o3d.io.read_point_cloud(os.path.join(self.fruit_list[fid]['path'],'gt/pcd/fruit.ply'))
+        pcd = o3d.t.io.read_point_cloud(os.path.join(self.fruit_list[fid]['path'],'gt/pcd/fruit.ply'))
         return self.pcd_to_tensor(pcd, self.num_points)
 
     def get_rgbd(self, fid):
@@ -45,7 +45,7 @@ class ShapeCompletionDataset():
         
         rgbd_data = {
             'intrinsic': intrinsic,
-            'pcd': o3d.geometry.PointCloud(),
+            'pcd': o3d.t.geometry.PointCloud(),
             'frames': {}
         }
 
@@ -92,7 +92,7 @@ class ShapeCompletionDataset():
     @staticmethod
     def rgbd_to_pcd(rgb, depth, mask, pose, K):
 
-        rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(rgb),
+        rgbd = o3d.t.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(rgb),
                                                                   o3d.geometry.Image(depth * mask),
                                                                   depth_scale=1,
                                                                   depth_trunc=1.0,
@@ -108,7 +108,7 @@ class ShapeCompletionDataset():
 
         extrinsic = np.linalg.inv(pose)
         
-        frame_pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
+        frame_pcd = o3d.t.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
         return frame_pcd
 
     @staticmethod
@@ -130,7 +130,6 @@ class ShapeCompletionDataset():
         
         keys = list(self.fruit_list.keys())
         fid = keys[idx]
-        print(fid)
         
         gt_pcd = self.get_gt(fid)
         input_data = self.get_rgbd(fid)
