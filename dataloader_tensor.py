@@ -111,7 +111,7 @@ class ShapeCompletionDataset():
         frame_pcd = o3d.t.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
         return frame_pcd
 
-    @staticmethod@staticmethod
+    @staticmethod
     def pcd_to_tensor(pcd, num_points):
         points = pcd.point["positions"]  # Access the tensor directly.
         if points.shape[0] == 0:
