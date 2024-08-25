@@ -92,7 +92,7 @@ class ShapeCompletionDataset():
     @staticmethod
     def rgbd_to_pcd(rgb, depth, mask, pose, K):
 
-        rgbd = o3d.t.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(rgb),
+        rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(rgb),
                                                                   o3d.geometry.Image(depth * mask),
                                                                   depth_scale=1,
                                                                   depth_trunc=1.0,
