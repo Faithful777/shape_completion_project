@@ -91,38 +91,27 @@ class ShapeCompletionDataset():
 
     @staticmethod
     def rgbd_to_pcd(rgb, depth, mask, pose, K):
-        # Create the RGBD image using the legacy Open3D API
-        rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(
-            o3d.geometry.Image(rgb),
-            o3d.geometry.Image(depth * mask),
-            depth_scale=1.0,
-            depth_trunc=1.0,
-            convert_rgb_to_intensity=False
-        )
-    
-        # Convert the intrinsic matrix to a 3x3 Open3D tensor
-        intrinsic_tensor = o3d.core.Tensor([[K[0, 0], 0, K[0, 2]],
-                                            [0, K[1, 1], K[1, 2]],
-                                            [0, 0, 1]], dtype=o3d.core.float64)
-    
-        # Convert the intrinsic tensor to the correct 4x4 format expected by the function
-        intrinsic = o3d.core.Tensor(np.array([[K[0, 0], 0, K[0, 2], 0],
-                                              [0, K[1, 1], K[1, 2], 0],
-                                              [0, 0, 1, 0],
-                                              [0, 0, 0, 1]], dtype=np.float64))
-    
-        # Convert the pose (extrinsic matrix) to an Open3D tensor and invert it
-        extrinsic = o3d.core.Tensor(np.linalg.inv(pose), dtype=o3d.core.float64)
-    
-        # Convert the RGBD image to the tensor-based API format
-        rgbd_tensor = o3d.t.geometry.RGBDImage.from_legacy(rgbd)
-    
-        # Create the point cloud from the RGBD image
-        frame_pcd = o3d.t.geometry.PointCloud.create_from_rgbd_image(
-            rgbd_tensor, intrinsic, extrinsic
-        )
-    
+
+        rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(o3d.geometry.Image(rgb),
+                                                                  o3d.geometry.Image(depth * mask),
+                                                                  depth_scale=1,
+                                                                  depth_trunc=1.0,
+                                                                  convert_rgb_to_intensity=False)
+
+        intrinsic = o3d.camera.PinholeCameraIntrinsic()
+        intrinsic.set_intrinsics(height=rgb.shape[0],
+                                 width=rgb.shape[1],
+                                 fx=K[0, 0],
+                                 fy=K[1, 1],
+                                 cx=K[0, 2],
+                                 cy=K[1, 2])
+
+        extrinsic = np.linalg.inv(pose)
+        
+        frame_pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
+        frame_pcd = o3d.t.geometry.PointCloud.from_legacy(frame_pcd)
         return frame_pcd
+
 
     @staticmethod
     def pcd_to_tensor(pcd, num_points):
