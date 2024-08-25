@@ -107,8 +107,10 @@ class ShapeCompletionDataset():
                                  cy=K[1, 2])
 
         extrinsic = np.linalg.inv(pose)
+        intrinsic = o3d.core.Tensor(intrinsic)
+        extrinsic = o3d.core.Tensor(extrinsic)
         
-        frame_pcd = o3d.t.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
+        frame_pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd, intrinsic, extrinsic)
         return frame_pcd
 
     @staticmethod
